@@ -62,7 +62,7 @@ export const SignalRProvider: React.FC<{ children: React.ReactNode }> = ({
     if (!token) return
 
     const hubUrl = import.meta.env.VITE_API_URL
-      ? `${import.meta.env.VITE_API_URL}/api/translation-hub`
+      ? `${import.meta.env.VITE_API_URL}/translation-hub`
       : "http://localhost:5164/api/translation-hub"
 
     console.log("Building SignalR Connection...")
