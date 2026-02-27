@@ -41,7 +41,7 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col justify-center relative overflow-hidden bg-mesh">
+    <div className="min-h-[100dvh] bg-slate-950 flex flex-col justify-center relative overflow-hidden bg-mesh">
       {/* Decorative Orbs */}
       <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-600/20 rounded-full blur-[120px]" />
       <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-cyan-500/20 rounded-full blur-[120px]" />
@@ -117,21 +117,6 @@ export default function Login() {
             </div>
 
             <div className="flex items-center justify-between mt-2">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 bg-slate-900 border-slate-700 rounded text-blue-500 focus:ring-blue-500 focus:ring-offset-slate-900"
-                />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-2 block text-sm text-slate-400"
-                >
-                  Beni hatırla
-                </label>
-              </div>
-
               <div className="text-sm">
                 <a
                   href="#"

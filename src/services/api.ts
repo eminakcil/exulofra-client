@@ -104,7 +104,11 @@ api.interceptors.response.use(
         return new Promise((resolve) => {
           addRefreshSubscriber((token: string) => {
             if (originalRequest.headers) {
-              originalRequest.headers.Authorization = `Bearer ${token}`
+              if (typeof originalRequest.headers.set === "function") {
+                originalRequest.headers.set("Authorization", `Bearer ${token}`)
+              } else {
+                originalRequest.headers.Authorization = `Bearer ${token}`
+              }
             }
             resolve(api(originalRequest))
           })
@@ -133,7 +137,14 @@ api.interceptors.response.use(
 
         // Retry current failed request
         if (originalRequest.headers) {
-          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`
+          if (typeof originalRequest.headers.set === "function") {
+            originalRequest.headers.set(
+              "Authorization",
+              `Bearer ${newAccessToken}`,
+            )
+          } else {
+            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`
+          }
         }
         return api(originalRequest)
       } catch (refreshError) {

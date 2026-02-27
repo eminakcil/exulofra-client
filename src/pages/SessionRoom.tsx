@@ -779,7 +779,7 @@ export default function SessionRoom() {
 
   if (isDataLoading) {
     return (
-      <div className="h-[calc(100vh-64px)] w-full flex flex-col items-center justify-center relative bg-slate-950 text-slate-200">
+      <div className="flex-1 h-full w-full flex flex-col items-center justify-center relative bg-slate-950 text-slate-200">
         <Loader2 className="w-12 h-12 text-blue-500 animate-spin mb-4" />
         <h2 className="text-xl font-medium">Oturum Yükleniyor...</h2>
         <p className="text-sm text-slate-400 mt-2">
@@ -791,7 +791,7 @@ export default function SessionRoom() {
 
   if (!isConnected) {
     return (
-      <div className="h-[calc(100vh-64px)] w-full flex flex-col items-center justify-center relative bg-slate-950 text-slate-200">
+      <div className="flex-1 h-full w-full flex flex-col items-center justify-center relative bg-slate-950 text-slate-200">
         <Loader2 className="w-12 h-12 text-blue-500 animate-spin mb-4" />
         <h2 className="text-xl font-medium">Bağlantı Kuruluyor...</h2>
         <p className="text-sm text-slate-400 mt-2">
@@ -860,7 +860,7 @@ export default function SessionRoom() {
   }
 
   return (
-    <div className="h-[calc(100vh-64px)] w-full overflow-hidden relative bg-slate-950">
+    <div className="flex-1 h-full w-full overflow-hidden relative bg-slate-950">
       <SessionHeader
         title={activeType ? modeTitles[activeType] : "Bilinmeyen Mod"}
         onEnd={handleEnd}

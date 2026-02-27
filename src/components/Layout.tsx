@@ -12,8 +12,8 @@ export function Layout() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col">
-      <header className="bg-slate-900 border-b border-slate-800 p-4 sticky top-0 z-20 flex justify-between items-center text-slate-300">
+    <div className="h-[100dvh] overflow-hidden bg-slate-950 flex flex-col">
+      <header className="bg-slate-900 border-b border-slate-800 p-4 flex-none z-20 flex justify-between items-center text-slate-300">
         <div className="flex items-center gap-4">
           <button
             onClick={() => navigate("/dashboard")}
@@ -38,7 +38,7 @@ export function Layout() {
           <span className="hidden sm:inline">Çıkış Yap</span>
         </button>
       </header>
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto flex flex-col relative w-full h-full">
         <Outlet />
       </main>
     </div>

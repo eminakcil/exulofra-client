@@ -67,7 +67,9 @@ export const SignalRProvider: React.FC<{ children: React.ReactNode }> = ({
 
     console.log("Building SignalR Connection...")
     const newConnection = new signalR.HubConnectionBuilder()
-      .withUrl(hubUrl, { accessTokenFactory: () => token })
+      .withUrl(hubUrl, {
+        accessTokenFactory: () => useAuthStore.getState().token || "",
+      })
       .withHubProtocol(new MessagePackHubProtocol())
       .withAutomaticReconnect([0, 2000, 5000, 10000, 30000])
       .build()
@@ -126,6 +128,7 @@ export const SignalRProvider: React.FC<{ children: React.ReactNode }> = ({
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useSignalRContext = () => {
   const ctx = useContext(SignalRContext)
   if (!ctx)

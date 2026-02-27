@@ -1,13 +1,12 @@
 import { useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
 import { motion } from "framer-motion"
-import { Mic2, ArrowRight, Mail, Lock, User } from "lucide-react"
+import { Mic2, ArrowRight, Mail, Lock } from "lucide-react"
 import toast from "react-hot-toast"
 import { authService } from "../services/auth.service"
 
 export default function Register() {
   const navigate = useNavigate()
-  const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -31,7 +30,7 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col justify-center relative overflow-hidden bg-mesh">
+    <div className="min-h-[100dvh] bg-slate-950 flex flex-col justify-center relative overflow-hidden bg-mesh">
       {/* Decorative Orbs - Positioned differently from Login for variety */}
       <div className="absolute top-[10%] right-[-5%] w-96 h-96 bg-purple-600/20 rounded-full blur-[120px]" />
       <div className="absolute bottom-[-5%] left-[-10%] w-96 h-96 bg-blue-500/20 rounded-full blur-[120px]" />
@@ -62,25 +61,6 @@ export default function Register() {
 
         <div className="glass-card rounded-3xl p-8 relative overflow-hidden">
           <form className="space-y-5" onSubmit={handleSubmit}>
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-slate-300 pl-1">
-                Ad Soyad
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-slate-500" />
-                </div>
-                <input
-                  type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="block w-full pl-11 pr-4 py-3 bg-slate-950/60 border border-slate-700/60 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all sm:text-sm"
-                  placeholder="John Doe"
-                />
-              </div>
-            </div>
-
             <div className="space-y-1">
               <label className="text-sm font-medium text-slate-300 pl-1">
                 E-posta Adresi
