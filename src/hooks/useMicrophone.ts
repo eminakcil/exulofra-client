@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react"
+import { useState, useCallback, useRef, useEffect } from "react"
 
 interface UseMicrophoneOptions {
   onAudioData: (data: Int16Array) => void
@@ -114,6 +114,13 @@ export const useMicrophone = () => {
     }
     setIsRecording(false)
   }, [])
+
+  // Ensure microphone hardware is released if the component unmounts unexpectedly
+  useEffect(() => {
+    return () => {
+      stopRecording()
+    }
+  }, [stopRecording])
 
   return { isRecording, error, startRecording, stopRecording }
 }

@@ -9,9 +9,16 @@
   --font-display: "Outfit", system-ui, sans-serif;
 }
 
+html,
+body {
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
+  touch-action: pan-y;
+}
+
 @layer base {
   body {
-    @apply bg-slate-950 text-slate-50 antialiased overflow-x-hidden overscroll-y-none;
+    @apply bg-slate-950 text-slate-50 antialiased overflow-x-hidden overscroll-none;
   }
 
   ::-webkit-scrollbar {

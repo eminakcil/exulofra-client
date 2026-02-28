@@ -20,7 +20,7 @@ export function Layout() {
             className="flex items-center gap-2 text-slate-50 font-bold tracking-tight hover:text-white transition"
           >
             <Home className="w-5 h-5 text-blue-500" />
-            <span>ExulofraClient</span>
+            <span>Exulofra</span>
           </button>
           <button
             onClick={() => navigate("/history")}
@@ -38,7 +38,7 @@ export function Layout() {
           <span className="hidden sm:inline">Çıkış Yap</span>
         </button>
       </header>
-      <main className="flex-1 overflow-y-auto flex flex-col relative w-full h-full">
+      <main className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden flex flex-col relative w-full">
         <Outlet />
       </main>
     </div>

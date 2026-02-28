@@ -189,7 +189,7 @@ export default function Setup() {
   }
 
   return (
-    <div className="min-h-full flex flex-col justify-center p-4 relative overflow-hidden">
+    <div className="min-h-full flex-1 shrink-0 flex flex-col justify-center p-4 py-12 relative overflow-x-hidden">
       {/* Decorative Orbs */}
       <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none" />

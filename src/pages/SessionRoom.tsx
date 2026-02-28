@@ -26,6 +26,7 @@ interface ModeViewProps {
   toggleMic: () => void
   translations: TranslationSegment[]
   partialText: PartialSegment | null
+  playingSegmentId: string | null
 }
 
 const SessionHeader = ({
@@ -106,20 +107,24 @@ const ChatBubble = ({
   isPartial = false,
   speakerTag,
   onlySource = false,
+  isActive = false,
 }: {
   source: string
   target: string
   isPartial?: boolean
   speakerTag?: string
   onlySource?: boolean
+  isActive?: boolean
 }) => (
   <motion.div
     initial={{ opacity: 0, y: 10, scale: 0.98 }}
     animate={{ opacity: 1, y: 0, scale: 1 }}
-    className={`flex flex-col gap-1 md:gap-2 p-4 md:p-6 rounded-3xl max-w-3xl mx-auto w-full transition-colors ${
-      isPartial
-        ? "bg-slate-800/40 border border-slate-700/50 shadow-inner"
-        : "bg-slate-800/80 border border-slate-700/80 shadow-lg"
+    className={`flex flex-col gap-1 md:gap-2 p-4 md:p-6 rounded-3xl max-w-3xl mx-auto w-full transition-all duration-300 ${
+      isActive
+        ? "bg-slate-800/90 border border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+        : isPartial
+          ? "bg-slate-800/40 border border-slate-700/50 shadow-inner"
+          : "bg-slate-800/80 border border-slate-700/80 shadow-lg"
     }`}
   >
     <div className="flex items-center justify-between mb-1">
@@ -155,6 +160,7 @@ const ChatHistoryView = ({
   toggleMic,
   translations,
   partialText,
+  playingSegmentId,
 }: ModeViewProps) => {
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -165,7 +171,7 @@ const ChatHistoryView = ({
   }, [translations, partialText])
 
   return (
-    <div className="h-full flex flex-col pt-20 pb-4 relative bg-slate-950">
+    <div className="flex-1 min-h-0 w-full flex flex-col pt-20 pb-4 relative bg-slate-950">
       <div
         ref={scrollRef}
         className="flex-1 overflow-y-auto space-y-4 md:space-y-6 pb-40 scroll-smooth px-4 sm:px-6"
@@ -185,6 +191,7 @@ const ChatHistoryView = ({
             target={t.targetText}
             speakerTag={t.speakerTag}
             onlySource={true} // Reporting only shows source naturally
+            isActive={t.id === playingSegmentId}
           />
         ))}
         {partialText && (
@@ -226,6 +233,7 @@ const DubbingView = ({
   toggleMic,
   translations,
   partialText,
+  playingSegmentId,
 }: ModeViewProps) => {
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -236,7 +244,7 @@ const DubbingView = ({
   }, [translations, partialText])
 
   return (
-    <div className="h-full flex flex-col pt-20 pb-4 relative bg-slate-950">
+    <div className="flex-1 min-h-0 w-full flex flex-col pt-20 pb-4 relative bg-slate-950">
       <div
         ref={scrollRef}
         className="flex-1 overflow-y-auto space-y-6 pb-40 scroll-smooth px-4 sm:px-8 max-w-5xl mx-auto w-full"
@@ -251,7 +259,11 @@ const DubbingView = ({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             key={t.id || idx}
-            className="flex flex-col gap-2 p-6 md:p-8 rounded-3xl bg-slate-900/50 border border-slate-800 shadow-md"
+            className={`flex flex-col gap-2 p-6 md:p-8 rounded-3xl transition-all duration-300 ${
+              t.id === playingSegmentId
+                ? "bg-slate-900/80 border border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
+                : "bg-slate-900/50 border border-slate-800 shadow-md"
+            }`}
           >
             {/* Source Text (Spoken) - Preview */}
             <p className="text-lg md:text-xl font-medium text-amber-500/90 pl-2 border-l-2 border-amber-500/50">
@@ -313,6 +325,7 @@ const DialogueView = ({
   toggleMic,
   translations,
   partialText,
+  playingSegmentId,
 }: ModeViewProps) => {
   const topScrollRef = useRef<HTMLDivElement>(null)
   const bottomScrollRef = useRef<HTMLDivElement>(null)
@@ -328,12 +341,12 @@ const DialogueView = ({
   }, [translations, partialText])
 
   return (
-    <div className="h-full flex flex-col relative bg-slate-950">
+    <div className="flex-1 min-h-0 w-full flex flex-col relative bg-slate-950">
       {/* Top Half - Flipped 180 degrees for the other person */}
       <div className="flex-1 bg-slate-900 border-b-4 border-slate-950 flex flex-col relative overflow-hidden">
         {/* Rotate the entire container 180deg so the counterpart reads it naturally */}
-        <div className="absolute inset-0 rotate-180 flex flex-col p-4 sm:p-6 pb-24">
-          {/* We use pb-24 to avoid the mic button overlapping the middle later */}
+        <div className="absolute inset-0 rotate-180 flex flex-col p-4 sm:p-6 pb-16">
+          {/* We use pb-32 to avoid the mic button overlapping the middle later */}
           <div
             ref={topScrollRef}
             className="flex-1 overflow-y-auto space-y-4 scroll-smooth pr-2"
@@ -352,7 +365,11 @@ const DialogueView = ({
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   key={t.id || idx}
-                  className="bg-blue-600/20 border border-blue-500/30 p-5 rounded-3xl max-w-2xl mx-auto w-full shadow-lg"
+                  className={`border p-5 rounded-3xl max-w-2xl mx-auto w-full transition-all duration-300 ${
+                    t.id === playingSegmentId
+                      ? "bg-blue-600/40 border-emerald-400/60 shadow-[0_0_20px_rgba(52,211,153,0.3)]"
+                      : "bg-blue-600/20 border-blue-500/30 shadow-lg"
+                  }`}
                 >
                   <p
                     className="text-3xl md:text-5xl font-bold text-white text-center"
@@ -408,8 +425,8 @@ const DialogueView = ({
 
       {/* Bottom Half - Normal orientation for the user */}
       <div className="flex-1 bg-slate-950 flex flex-col relative overflow-hidden">
-        <div className="absolute inset-0 flex flex-col p-4 sm:p-6 pt-20">
-          {/* pt-20 avoids mic overlap */}
+        <div className="absolute inset-0 flex flex-col p-4">
+          {/* pt-28 avoids mic overlap */}
           <div
             ref={bottomScrollRef}
             className="flex-1 overflow-y-auto space-y-4 scroll-smooth pr-2"
@@ -428,7 +445,11 @@ const DialogueView = ({
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   key={`b-${t.id || idx}`}
-                  className="bg-slate-800/80 border border-slate-700/80 p-5 rounded-3xl max-w-2xl mx-auto w-full shadow-lg"
+                  className={`border p-5 rounded-3xl max-w-2xl mx-auto w-full transition-all duration-300 ${
+                    t.id === playingSegmentId
+                      ? "bg-slate-800/95 border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
+                      : "bg-slate-800/80 border-slate-700/80 shadow-lg"
+                  }`}
                 >
                   <p
                     className="text-3xl md:text-5xl font-bold text-white text-center"
@@ -472,6 +493,7 @@ const BroadcastView = ({
   toggleMic,
   translations,
   partialText,
+  playingSegmentId,
 }: ModeViewProps) => {
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -482,7 +504,7 @@ const BroadcastView = ({
   }, [translations, partialText])
 
   return (
-    <div className="h-full bg-black relative overflow-hidden flex flex-col">
+    <div className="flex-1 min-h-0 w-full bg-black relative overflow-hidden flex flex-col">
       {/* Cinematic background */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-900/50 via-black to-black" />
 
@@ -518,7 +540,11 @@ const BroadcastView = ({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 layout
-                className="max-w-4xl mx-auto w-full text-center"
+                className={`max-w-4xl mx-auto w-full text-center transition-all duration-300 rounded-2xl p-4 ${
+                  t.id === playingSegmentId
+                    ? "bg-emerald-500/10 border border-emerald-500/30 shadow-[0_0_30px_rgba(16,185,129,0.1)]"
+                    : ""
+                }`}
               >
                 <p
                   className="text-3xl md:text-5xl font-bold text-white drop-shadow-[0_4px_4px_rgba(0,0,0,1)] leading-snug"
@@ -589,9 +615,12 @@ export default function SessionRoom() {
   const [isDataLoading, setIsDataLoading] = useState(true)
 
   // Audio playback queue
-  const audioQueueRef = useRef<string[]>([])
+  const audioQueueRef = useRef<{ segmentId: string; audioDataUrl: string }[]>(
+    [],
+  )
   const isPlayingRef = useRef<boolean>(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const [playingSegmentId, setPlayingSegmentId] = useState<string | null>(null)
 
   // Core Realtime States
   const [translations, setTranslations] = useState<TranslationSegment[]>([])
@@ -668,22 +697,21 @@ export default function SessionRoom() {
   const playNextAudio = () => {
     if (audioQueueRef.current.length === 0) {
       isPlayingRef.current = false
+      setPlayingSegmentId(null)
       return
     }
 
     isPlayingRef.current = true
-    const nextUrl = audioQueueRef.current.shift()!
+    const nextItem = audioQueueRef.current.shift()!
+    setPlayingSegmentId(nextItem.segmentId)
 
-    // Create or reuse audio element
-    if (!audioRef.current) {
-      audioRef.current = new Audio()
-      audioRef.current.onended = playNextAudio
+    if (audioRef.current) {
+      audioRef.current.src = nextItem.audioDataUrl
+      audioRef.current.play().catch((e) => {
+        console.warn("Audio play failed:", e)
+        playNextAudio() // Skip and try next if error
+      })
     }
-
-    audioRef.current.src = nextUrl
-    audioRef.current.play().catch(() => {
-      playNextAudio() // Skip and try next if error
-    })
   }
 
   // 3. SignalR Hook
@@ -702,13 +730,12 @@ export default function SessionRoom() {
       setTranslations((prev) => [...prev, segment])
       setPartialText(null) // Clear partial when full translation arrives
     },
-    onReceiveAudio: (_segmentId, base64Audio) => {
+    onReceiveAudio: (segmentId, base64Audio) => {
       // Form a data URI from the base64 string.
-      // Assuming WAV format from Azure TTS; adjust mime type if it's MP3 or PCM.
       const audioDataUrl = `data:audio/wav;base64,${base64Audio}`
 
       // Queue audio for TTS playback
-      audioQueueRef.current.push(audioDataUrl)
+      audioQueueRef.current.push({ segmentId, audioDataUrl })
       if (!isPlayingRef.current) {
         playNextAudio()
       }
@@ -743,6 +770,15 @@ export default function SessionRoom() {
   }
 
   const toggleMic = async () => {
+    // Force play the silent audio ref to bypass iOS Safari restrictions
+    // This requires a direct user interaction event loop
+    if (audioRef.current && audioRef.current.src === "") {
+      // Provide a tiny silent data URI so it doesn't fail on empty src
+      audioRef.current.src =
+        "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA"
+      audioRef.current.play().catch(() => {})
+    }
+
     // If we're already recording, stop
     if (isRecording) {
       stopRecording()
@@ -811,6 +847,7 @@ export default function SessionRoom() {
             toggleMic={toggleMic}
             translations={translations}
             partialText={partialText}
+            playingSegmentId={playingSegmentId}
           />
         )
       case SessionType.Reporting:
@@ -820,6 +857,7 @@ export default function SessionRoom() {
             toggleMic={toggleMic}
             translations={translations}
             partialText={partialText}
+            playingSegmentId={playingSegmentId}
           />
         )
       case SessionType.Dialogue:
@@ -829,6 +867,7 @@ export default function SessionRoom() {
             toggleMic={toggleMic}
             translations={translations}
             partialText={partialText}
+            playingSegmentId={playingSegmentId}
           />
         )
       case SessionType.Broadcast:
@@ -838,6 +877,7 @@ export default function SessionRoom() {
             toggleMic={toggleMic}
             translations={translations}
             partialText={partialText}
+            playingSegmentId={playingSegmentId}
           />
         )
       default:
@@ -847,6 +887,7 @@ export default function SessionRoom() {
             toggleMic={toggleMic}
             translations={translations}
             partialText={partialText}
+            playingSegmentId={playingSegmentId}
           />
         )
     }
@@ -860,13 +901,16 @@ export default function SessionRoom() {
   }
 
   return (
-    <div className="flex-1 h-full w-full overflow-hidden relative bg-slate-950">
+    <div className="flex-1 min-h-0 w-full overflow-hidden relative bg-slate-950 flex flex-col">
       <SessionHeader
         title={activeType ? modeTitles[activeType] : "Bilinmeyen Mod"}
         onEnd={handleEnd}
         onSettings={handleSettings}
       />
       {renderMode()}
+
+      {/* Persistent Audio node for iOS Safari tracking and stable playback */}
+      <audio ref={audioRef} onEnded={playNextAudio} className="hidden" />
     </div>
   )
 }
